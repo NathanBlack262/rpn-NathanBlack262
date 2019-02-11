@@ -1,0 +1,18 @@
+
+'''
+>>> from rpn import *
+
+>>> evaluate("5 2 +")
+7
+>>> evaluate("7 3 -")
+4
+>>> evaluate("3 8 2 * +")
+19
+>>> evaluate("3 6 2 - *")
+12
+>>> evaluate("4 7 + 6 2 - *")
+44
+>>> evaluate("5 7 - 8 1 2 + * -")
+-26
+
+'''
