@@ -2,21 +2,6 @@ from stack import Stack
 
 
 def evaluate(str):
-    '''
-    >>> evaluate("5 2 +")
-    7
-    >>> evaluate("7 3 -")
-    4
-    >>> evaluate("3 8 2 * +")
-    19
-    >>> evaluate("3 6 2 - *")
-    12
-    >>> evaluate("4 7 + 6 2 - *")
-    44
-    >>> evaluate("5 7 - 8 1 2 + * -")
-    -26
-
-    '''
     stack = Stack()
     opList = str.split()
     for i in opList:
@@ -40,9 +25,44 @@ def evaluate(str):
             stack.push(int(i))
     return stack.peek()
 
+def convert(str):
+    postfix = []
+    operatorStrings = ["+", "-", "*", "/"]
+    operators = Stack()
+    for char in str:
+        if char == "(":
+            operators.push(char)
+        elif char == ")":
+            while True:
+                x = operators.pop()
+                if x != "(":
+                    postfix.append(x)
+                else:
+                    postfix.append(x)
+                    break
+        elif char in operatorStrings:
+            while not operators.empty():
+                if operators.peek() == "(":
+                    postfix.append(operators.push())
+                    break
+                else:
+                    if char == "+":
+                        if char == "/" or char == "*":
+                            postfix.append(operators.pop())
+                        else:
+                            break
+        else:
+            postfix.append(char)
+    while not operators.empty():
+        postfix.append(operators.pop())
+    return ' '.join(postfix)
+            
+        
+
 def main():
-    import doctest
-    doctest.testfile('rpn_tester.txt')
+    print(convert("1 * 2 + 3 * 4 + 5 * 6 + 7 * 8"))
+#    import doctest
+#    doctest.testfile('rpn_tester.txt')
     
 
 
