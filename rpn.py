@@ -21,48 +21,134 @@ def evaluate(str):
             x = stack.pop()
             y = stack.pop()
             stack.push(y / x)
+        elif i == "^":
+            x = stack.pop()
+            y = stack.pop()
+            stack.push(y ** x)
         else:
             stack.push(int(i))
     return stack.peek()
 
 def convert(str):
     postfix = []
-    operatorStrings = ["+", "-", "*", "/"]
+    operatorStrings = ["+", "-", "*", "/", "^"]
     operators = Stack()
     for char in str:
         if char == "(":
             operators.push(char)
         elif char == ")":
-            while True:
+            while not operators.empty():
                 x = operators.pop()
                 if x != "(":
                     postfix.append(x)
                 else:
-                    postfix.append(x)
                     break
         elif char in operatorStrings:
             while not operators.empty():
                 if operators.peek() == "(":
-                    postfix.append(operators.push())
+                    operators.pop()
                     break
                 else:
-                    if char == "+":
-                        if char == "/" or char == "*":
+                    if char == "+" or char == "-":
+                        if operators.peek() in operatorStrings:
                             postfix.append(operators.pop())
                         else:
                             break
+                    elif char == "*" or char == "/":
+                        if operators.peek() == "/" or operators.peek() == "*" or operators.peek() == "^":
+                            postfix.append(operators.pop())
+                        else:
+                            break
+                    else:
+                        if operators.peek() == "^":
+                            postfix.append(operators.pop())
+                        else:
+                            break
+            operators.push(char)
         else:
             postfix.append(char)
     while not operators.empty():
         postfix.append(operators.pop())
-    return ' '.join(postfix)
+    postfixNotation = ''.join(postfix)
+    lastSpace = False
+    for i in range(3):
+        for j in range(1, len(postfixNotation)):
+            if postfixNotation[j] != " ":
+                if postfixNotation[j-1] != " ":
+                    postfixNotation = postfixNotation[:j] + " " + postfixNotation[j:]
+                lastSpace = False
+            else:
+                if postfixNotation[j-1] == " ":
+                    postfixNotation = postfixNotation[:j]  + postfixNotation[j+1:]
+                lastSpace = True
+    return postfixNotation
             
-        
+def rpnCalculator():
+    stack = Stack()
+    while True:
+        if stack.empty():
+            print("Stack: Empty")
+        else:
+            x = stack.pop()
+            if stack.empty():
+                print("Stack: " + str(x))
+                stack.push(x)
+            else:
+                y = stack.pop()
+                print("Stack: " + str(y))
+                print("Stack: " + str(x))
+                stack.push(y)
+                stack.push(x)
+        i = input(">>> (Type 'stop' at any time to stop calculator) ")
+        if i == "+":
+            x = stack.pop()
+            y = stack.pop()
+            stack.push(y + x)
+        elif i == "-":
+            x = stack.pop()
+            y = stack.pop()
+            stack.push(y - x)
+        elif i == "*":
+            x = stack.pop()
+            y = stack.pop()
+            stack.push(y * x)
+        elif i == "/":
+            x = stack.pop()
+            y = stack.pop()
+            stack.push(y / x)
+        elif i == "^":
+            x = stack.pop()
+            y = stack.pop()
+            stack.push(y ** x)
+        elif i == "stop":
+            print("Thanks for using!")
+            break
+        else:
+            stack.push(int(i))
+    
 
 def main():
-    print(convert("1 * 2 + 3 * 4 + 5 * 6 + 7 * 8"))
-#    import doctest
-#    doctest.testfile('rpn_tester.txt')
+    rpnCalculator()
+#    useLoop = True
+#    againLoop = True
+#    while useLoop:
+#        function = input("Would you like to evaluate an (R)PN or (I)nfix expression? ")
+#        if function.lower() != "r" and function.lower() != "i" :
+#            print("Invalid input.")
+#        else:
+#            insert = input("Enter the expression here: ")
+#            if insert == "":
+#                insert = "0"
+#            if function.lower() == "r":
+#                print(evaluate(insert))
+#            else:
+#                print(evaluate(convert(insert)))
+#            again = input("Use again? ")
+#            if again.lower() == "n" or again.lower() == "no":
+#                print("Thanks for using!")
+#                break
+            
+                
     
 
 
