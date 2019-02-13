@@ -85,6 +85,7 @@ def convert(str):
             
 def rpnCalculator():
     stack = Stack()
+    print("Type 'stop' at any time to stop calculator")
     while True:
         if stack.empty():
             print("Stack: Empty")
@@ -99,7 +100,7 @@ def rpnCalculator():
                 print("Stack: " + str(x))
                 stack.push(y)
                 stack.push(x)
-        i = input(">>> (Type 'stop' at any time to stop calculator) ")
+        i = input(">>> ")
         if i == "+":
             x = stack.pop()
             y = stack.pop()
@@ -120,33 +121,55 @@ def rpnCalculator():
             x = stack.pop()
             y = stack.pop()
             stack.push(y ** x)
-        elif i == "stop":
+        elif i.lower() == "stop":
             print("Thanks for using!")
-            break
+            return
         else:
             stack.push(int(i))
+
+def inpostFixEvaluator():
+    useLoop = True
+    againLoop = True
+    while useLoop:
+        function = input("Would you like to evaluate an (R)PN or (I)nfix expression? ")
+        if function.lower() != "r" and function.lower() != "i" :
+            print("Invalid input.")
+        else:
+            insert = input("Enter the expression here: ")
+            if insert == "":
+                insert = "0"
+            if function.lower() == "r":
+                print(evaluate(insert))
+            else:
+                print(evaluate(convert(insert)))
+            again = input("Use again? ")
+            if again.lower() == "n" or again.lower() == "no":
+                print("Thanks for using!")
+                return
     
 
 def main():
-    rpnCalculator()
-#    useLoop = True
-#    againLoop = True
-#    while useLoop:
-#        function = input("Would you like to evaluate an (R)PN or (I)nfix expression? ")
-#        if function.lower() != "r" and function.lower() != "i" :
-#            print("Invalid input.")
-#        else:
-#            insert = input("Enter the expression here: ")
-#            if insert == "":
-#                insert = "0"
-#            if function.lower() == "r":
-#                print(evaluate(insert))
-#            else:
-#                print(evaluate(convert(insert)))
-#            again = input("Use again? ")
-#            if again.lower() == "n" or again.lower() == "no":
-#                print("Thanks for using!")
-#                break
+    tryAgainLoop = True
+    while True:
+        tryAgainLoop = True
+        use = input("Would you like to demonstrate this module's (R)PN Calculator or (IP) Infix/Postfix Evaluation? ")
+        if use.lower() == "r":
+            rpnCalculator()
+        elif use.lower() == "ip":
+            inpostFixEvaluator()
+        else:
+            print("Invalid input.")
+        while tryAgainLoop:
+            again = input("Would you like to use a different method? (Y/N) ")
+            if again.lower() == "n" or again.lower() == "no":
+                print("Thanks for using!")
+                break
+            elif again.lower() == "y" or again.lower() == "yes":
+                tryAgainLoop = False
+            else:
+                print("Invalid input.")
+            
+            
             
                 
     
